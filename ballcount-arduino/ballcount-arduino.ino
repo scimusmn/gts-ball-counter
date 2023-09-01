@@ -1,11 +1,11 @@
 #include <Arduino.h>
 #include <FastLED.h>
 
-#define LEDS_PER_STRIP 60
-#define N_COUNTERS 3
+#define LEDS_PER_STRIP 41
+#define N_COUNTERS 11
 
 #define SMM_IMPLEMENTATION
-#define SMM_SERIAL_NO_HANDSHAKE
+#define SMM_NO_SERIAL_CONTROLLER
 #include "smm.h"
 #include "pins.h"
 
@@ -40,7 +40,8 @@ class Counter {
 	void renderLevel(int level) {
 		for (int i=0; i<LEDS_PER_STRIP; i++) {
 			float x = ((float) i) / ((float) level);
-			leds[i] = i<level ? CHSV(170, (1-(x*x))*255, 255) : CHSV(0, 0, 0);
+			leds[LEDS_PER_STRIP-i] = 
+				i<level ? CHSV(170, (1-(x*x))*255, 255) : CHSV(0, 0, 0);
 		}
 		m_controller->showLeds(128);
 	}
@@ -93,6 +94,14 @@ class CounterManager {
 		counter[0].setup<DATA0, CLOCK0, BEAM0>();
 		counter[1].setup<DATA1, CLOCK1, BEAM1>();
 		counter[2].setup<DATA2, CLOCK2, BEAM2>();
+		counter[3].setup<DATA3, CLOCK3, BEAM3>();
+		counter[4].setup<DATA4, CLOCK4, BEAM4>();
+		counter[5].setup<DATA5, CLOCK5, BEAM5>();
+		counter[6].setup<DATA6, CLOCK6, BEAM6>();
+		counter[7].setup<DATA7, CLOCK7, BEAM7>();
+		counter[8].setup<DATA8, CLOCK8, BEAM8>();
+		counter[9].setup<DATA9, CLOCK9, BEAM9>();
+		counter[10].setup<DATA10, CLOCK10, BEAM10>();
 	}
 
 	void update() {
@@ -113,7 +122,6 @@ class CounterManager {
 
 
 void setup() {
-	SmmSerial.begin();
 	counters.setup();
 	Serial.println("Arduino ready!");
 }
