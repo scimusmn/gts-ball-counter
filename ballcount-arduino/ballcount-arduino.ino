@@ -29,8 +29,10 @@ class BeamBreak : public smm::Button {
 };
 
 
+class CounterManager;
 class Counter {
 	protected:
+  friend class CounterManager;
 	BeamBreak *m_beam;
 	CLEDController *m_controller;
 	bool m_shouldReset;
@@ -104,6 +106,15 @@ class CounterManager {
 		counter[10].setup<DATA10, CLOCK10, BEAM10>();
 	}
 
+  void testCounters() {
+		for (int i=0; i<N_COUNTERS; i++) {
+			for (int j=0; j<LEDS_PER_STRIP; j++) {
+				counter[i].renderLevel(j);
+				delay(5);
+			}
+		}
+	}
+
 	void update() {
 		bool shouldReset = false;
 		for (int i=0; i<N_COUNTERS; i++) {
@@ -123,8 +134,10 @@ class CounterManager {
 
 void setup() {
 	counters.setup();
-	Serial.println("Arduino ready!");
+	delay(250);
+	counters.testCounters();
 }
+
 
 void loop() {
 	counters.update();
