@@ -43,7 +43,7 @@ class Counter {
 		for (int i=0; i<LEDS_PER_STRIP; i++) {
 			float x = ((float) i) / ((float) level);
 			leds[LEDS_PER_STRIP-i] = 
-				i<level ? CHSV(170, (1-(x*x))*255, 255) : CHSV(0, 0, 0);
+				i<=level ? CHSV(170, (1-(x*x))*255, 255) : CHSV(0, 0, 0);
 		}
 		m_controller->showLeds(128);
 	}
